@@ -70,14 +70,19 @@ app.post("/register",(req,res)=>{
     })
 
 //Add products
+
 app.post("/addproducts",(req,res)=>{
     const{name,price,quantity,category}=req.body
-   
-  
-        {
+    Product.findOne({name:name},(err,product)=>{
+        if(product){
+            res.send({message:"Product already added"})
+        }
+        else{
             const product=new Product({
-                _id:new Mongoose.Types.ObjectId,
-                name,price,quantity,category
+                name,
+                price,
+                quantity,
+                category
             })
             product.save(err=>{
                 if(err){
@@ -87,11 +92,14 @@ app.post("/addproducts",(req,res)=>{
                 }
             })
         }
-    
+    })
 
 
 
     })
+
+
+
 //ListProducts
 app.get("/listproducts",(async(req,res)=>{
 Product.find({},function(err,users){
